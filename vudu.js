@@ -13,13 +13,12 @@ function getDataRangeFromServer(startIndex, endIndex) {
         const endPageIndex = ~~(endIndex / length);
         Promise.all(Array(endPageIndex - startPageIndex + 1)
                     .fill(0).map((_, i) => startPageIndex + i)
-        .map(getPageFromServer)).then(values => {
-            return values.map((value, index) => {
-                const start = index === 0 ? startIndex % length: 0;
-                const end = index === endPageIndex - startPageIndex ? endIndex % length + 1: length;
-                return value.slice(start, end);
-            })
-        }).then(values => resolve([].concat(...values)));
+                    .map(getPageFromServer)).then(values => values.map((value, index) => {
+                        const start = index === 0 ? startIndex % length: 0;
+                        const end = index === endPageIndex - startPageIndex ? endIndex % length + 1: length;
+                        return value.slice(start, end);
+                    })
+                ).then(values => resolve([].concat(...values)));
     });
 }
 getDataRangeFromServer(0, 0).then(result => console.log(result))
