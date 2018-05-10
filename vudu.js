@@ -1,7 +1,7 @@
 const length = 25
 function getPageFromServer(pageIndex) {
     return new Promise(function(resolve) {
-        resolve(Array.from({ length }, (_, i) => 25 * pageIndex + i));        
+        resolve(Array.from({ length }, (_, i) => length * pageIndex + i));        
     });
 }
 function getDataRangeFromServer(startIndex, endIndex) {
@@ -15,15 +15,9 @@ function getDataRangeFromServer(startIndex, endIndex) {
                     .fill(0).map((_, i) => startPageIndex + i)
         .map(getPageFromServer)).then(values => {
             return values.map((value, index) => {
-                if (index === 0 && index === endPageIndex - startPageIndex) {
-                    return value.slice(startIndex % length, endIndex % length + 1)
-                } else if (index === 0) {
-                    return value.slice(startIndex % length)
-                } else if (index === endPageIndex - startPageIndex) {
-                    return value.slice(0, endIndex % length + 1)
-                } else {
-                    return value
-                }
+                const start = index === 0 ? startIndex % length: 0;
+                const end = index === endPageIndex - startPageIndex ? endIndex % length + 1: length;
+                return value.slice(start, end);
             })
         }).then(values => resolve([].concat(...values)));
     });
