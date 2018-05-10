@@ -1,6 +1,6 @@
 const length = 25
 function getPageFromServer(pageIndex) {
-    return new Promise(function(resolve) {
+    return new Promise(resolve => {
         resolve(Array.from({ length }, (_, i) => length * pageIndex + i));        
     });
 }
@@ -8,7 +8,7 @@ function getDataRangeFromServer(startIndex, endIndex) {
     if (endIndex < startIndex || startIndex < 0) {
         return Promise.resolve([])
     }
-    return new Promise(function(resolve) {
+    return new Promise(resolve => {
         const startPageIndex = ~~(startIndex / length);
         const endPageIndex = ~~(endIndex / length);
         Promise.all(Array(endPageIndex - startPageIndex + 1)
